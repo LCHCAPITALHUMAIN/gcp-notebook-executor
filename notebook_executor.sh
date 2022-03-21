@@ -11,6 +11,7 @@ fi
 if [[ ! -z $(command -v conda) ]]; then
   source /opt/anaconda3/bin/activate base
   sudo /opt/anaconda3/bin/pip install -U papermill==0.19.1
+  sudo /opt/anaconda3/bin/pip install -U gaapi4py==1.2.0
 fi
 
 readonly INPUT_NOTEBOOK_GCS_FILE=$(curl http://metadata.google.internal/computeMetadata/v1/instance/attributes/input_notebook -H "Metadata-Flavor: Google")
@@ -25,7 +26,7 @@ readonly OUTPUT_NOTEBOOK_CLEAN_NAME="${OUTPUT_NOTEBOOK_NAME%.ipynb}-clean"
 readonly TEMPORARY_NOTEBOOK_PATH="${TEMPORARY_NOTEBOOK_FOLDER}/${OUTPUT_NOTEBOOK_NAME}"
 # For backward compitability.
 readonly LEGACY_NOTEBOOK_PATH="${TEMPORARY_NOTEBOOK_FOLDER}/notebook.ipynb"
-
+gsutil cp "${PARAMETERS_GCS_KEY_FILE}" key_account.json
 PAPERMILL_EXIT_CODE=0
 if [[ -z "${PARAMETERS_GCS_FILE}" ]]; then
   echo "No input parameters present"
